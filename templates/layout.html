@@ -1,0 +1,28 @@
+{% include "header.html" %}
+
+<body>
+
+{% include "header_bar.html" %}
+<div class="d-flex">
+
+{% include "sidebar.html" %}
+
+
+{% block content %}
+
+{% endblock content %}
+
+</div>
+
+
+
+{% include "footer.html" %}
+
+
+{% block page_specific_js %}
+
+{% endblock page_specific_js %}
+
+</body>
+
+</html>

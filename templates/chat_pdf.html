@@ -1,0 +1,111 @@
+{% extends "layout.html" %}
+
+
+
+
+
+{% block content  %}
+
+
+<style>
+        #sidebar {
+            background-color: #343a40; /* Sidebar color */
+            height: 100vh; /* Full height */
+        }
+
+        .chat-container {
+            margin: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            max-height: 700px; /* Set a maximum height */
+            max-width: 80%;
+            overflow-y: auto; /* Enable scrolling */
+        }
+
+        .message {
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            max-width: 75%;
+            word-wrap: break-word; /* Ensure long words break */
+        }
+
+        .message.user {
+            background-color: #007bff;
+            color: white;
+            margin-left: auto; /* Push user messages to the right */
+            text-align: right; /* Align text to the right */
+        }
+
+        .message.system {
+            background-color: #e9ecef;
+            color: #333;
+            text-align: left; /* Align system messages to the left */
+        }
+    </style>
+
+
+
+<div class="container flex-grow-1">
+
+
+    <div class="row" style="height:80%; overflow-y: auto;"  >
+    <div  class="chat-container" id="result">
+    </div>        
+  
+    </div>
+
+    <form method="post"  onsubmit="return false">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-10">           
+                <div class="input-group">
+                    <input class="form-control" type="text" name="prompt_query">
+                    <span class="input-group-text" onclick="user_message();"><i class="fas fa-search"></i></span>
+                </div>
+            </div>
+
+        </div>
+    </form>
+
+</div>    
+
+{% endblock content %}
+
+{% block page_specific_js %}
+<script>
+ function print_result(){
+    $('[name=prompt_query]').val()
+ }   
+
+function user_message() {
+    var ele = $('#result');
+    var prompt =   $('[name=prompt_query]').val();
+    var token =  $('[name=csrfmiddlewaretoken]').val();
+
+    var ele_child = $('<div class="message user">' + prompt + '</div>'); //creation of a new div
+    ele.append(ele_child) 
+    send_query(prompt, token);   
+}
+
+function send_query(prompt, token){
+      var url_str = "/pdfquery/"
+      obj_data = {
+        "prompt_query" : prompt,
+        "csrfmiddlewaretoken": token         
+      }
+      common_ajax(obj_data, url_str, "POST", call_back_function)
+    }
+
+function call_back_function(response) {
+    var ele = $('#result'); 
+    var txt = response.message;
+    console.log(txt);         
+    var ele_child = $('<div class="message system">' + txt.replace("\n\n", "<br>").replace('```html', "") + '</div>'); //creation of a new div
+    ele.append(ele_child);
+}
+    
+</script>    
+{% endblock page_specific_js %}
