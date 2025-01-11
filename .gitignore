@@ -1,8 +1,11 @@
 
-
 .env
 # Ignore all files in the migrations folder
-*/migrations/
+**/migrations/
 
-# But keep the migrations folder itself
-*/!migrations
+# keep the migrations folder
+!**/migrations/
+!**/migrations/__init__.py
+
+# ignore 
+**/__pycache__/
