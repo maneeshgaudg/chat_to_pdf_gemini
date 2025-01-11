@@ -1,0 +1,6 @@
+
+# Ignore all files in the migrations folder
+*/migrations/
+
+# But keep the migrations folder itself
+*/!migrations
